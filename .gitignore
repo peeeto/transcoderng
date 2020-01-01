@@ -1,3 +1,20 @@
+*.iml
+*.ipr
+*.iws
+.idea/
+target/
+atlassian-ide-plugin.xml
+logs/
+*.classpath
+*.project
+*.ids
+*.iml
+.settings/
+node_modules/
+
+output/
+/package-lock.json
+
 # Logs
 logs
 *.log
