@@ -1,0 +1,25 @@
+{
+  "name": "transcoder_js_fun",
+  "description": "transcoder_js_fun",
+  "author": "peeeto",
+  "email": "peeeto@seznam.cz",
+  "version": "1.0.0-SNAPSHOT",
+  "repository": "TODO",
+  "license": "Apache-2.0",
+  "readme": "README.md",
+  "scripts": {
+    "postinstall": "grunt",
+    "test": "grunt test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.4",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-qunit": "^3.1.0",
+    "grunt-contrib-uglify": "latest",
+    "grunt-qunit-junit": "latest",
+    "grunt-replace": "latest",
+    "jshint-stylish": "latest"
+  }
+}

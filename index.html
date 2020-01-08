@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta lang="en" charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="assets/css/main.css?v=1578516432490" rel="stylesheet">
+
+    <title>Transcoderng</title>
+    <!--DIST-START-->
+    <script src="assets/js/dist/main.min.js?v=1578516432490"></script>
+    <!--DIST-END-->
+    <!--DEV-START
+    <script src="assets/js/dist/main.js?v=1578516432490"></script>
+    <script src="assets/js/functions.js?v=1578516432490"></script>
+    DEV-END-->
+</head>
+<body>
+<div id="actions" class="centered-container">
+    <div class="actions">
+        <div class="actions-title">HashHex</div>
+        <div class="actions-content">
+            <a href="#" class="btn" id="md5Hex" onclick="encode(getPanel(), CryptoJS.MD5, CryptoJS.enc.Hex)" title="echo -n 'text to be encrypted' | openssl md5"><span>md5Hex</span></a>
+            <a href="#" class="btn" id="sha1Hex" onclick="encode(getPanel(), CryptoJS.SHA1, CryptoJS.enc.Hex)"><span>sha1Hex</span></a>
+            <a href="#" class="btn" id="sha256Hex" onclick="encode(getPanel(), CryptoJS.SHA256, CryptoJS.enc.Hex)"><span>sha256Hex</span></a>
+            <a href="#" class="btn" id="sha384Hex" onclick="encode(getPanel(), CryptoJS.SHA384, CryptoJS.enc.Hex)"><span>sha384Hex</span></a>
+            <a href="#" class="btn" id="sha512Hex" onclick="encode(getPanel(), CryptoJS.SHA512, CryptoJS.enc.Hex)"><span>sha512Hex</span></a>
+            <a href="#" class="btn" id="ripemd160Hex" onclick="encode(getPanel(), CryptoJS.RIPEMD160, CryptoJS.enc.Hex)"><span>ripemd160Hex</span></a>
+        </div>
+    </div>
+    <div id="hashBase64" class="row">
+        <div class="btn-group">
+            <input id="md5Base64" type="button" value="md5Base64"
+                   onclick="encode(getPanel(), CryptoJS.MD5, CryptoJS.enc.Base64)"
+                   title="echo -n 'text to be encrypted' | openssl md5 -binary | openssl base64"/>
+            <input id="sha1Base64" type="button" value="sha1Base64"
+                   onclick="encode(getPanel(), CryptoJS.SHA1, CryptoJS.enc.Base64)"/>
+            <input id="sha256Base64" type="button" value="sha256Base64"
+                   onclick="encode(getPanel(), CryptoJS.SHA256, CryptoJS.enc.Base64)"/>
+            <input id="sha384Base64" type="button" value="sha384Base64"
+                   onclick="encode(getPanel(), CryptoJS.SHA384, CryptoJS.enc.Base64)"/>
+            <input id="sha512Base64" type="button" value="sha512Base64"
+                   onclick="encode(getPanel(), CryptoJS.SHA512, CryptoJS.enc.Base64)"/>
+            <input id="ripemd160Base64" type="button" value="ripemd160Base64"
+                   onclick="encode(getPanel(), CryptoJS.RIPEMD160, CryptoJS.enc.Base64)"/>
+        </div>
+    </div>
+    <div id="encodeDecode" class="row">
+        <div class="btn-group">
+            <input id="urlEncode" type="button" value="urlEncode" onclick="encode(getPanel(), encodeURIComponent)"/>
+            <input id="urlDecode" type="button" value="urlDecode" onclick="encode(getPanel(), decodeURIComponent)"/>
+            <input id="base64Encode" type="button" value="base64Encode"
+                   onclick="encode(getPanel(), base64Encode )"/>
+            <input id="base64Decode" type="button" value="base64Decode" onclick="encode(getPanel(), base64Decode)"/>
+            <input id="base32Encode" type="button" value="base32Encode"
+                   onclick="encode(getPanel(), CryptoJS.enc.Utf8.parse, CryptoJS.enc.Base32)"/>
+            <input id="base32Decode" type="button" value="base32Decode"
+                   onclick="encode(getPanel(), CryptoJS.enc.Base32.parse, CryptoJS.enc.Utf8)"/>
+        </div>
+    </div>
+    <div id="ids" class="row">
+        <div class="btn-group">
+            <input id="UUID" type="button" value="UUID" onclick="encode(getPanel(), guid)"/>
+            <input id="momentToLong" type="button" value="yyyy-MM-dd HH:mm:ss.SSS Z -> 1234L"
+                   onclick="encode(getPanel(), stringToMillis)"/>
+            <input id="longToMoment" type="button" value="1234L -> yyyy-MM-dd HH:mm:ss.SSS Z"
+                   onclick="encode(getPanel(), millisToString)"/>
+        </div>
+    </div>
+    <div id="hexBase" class="row">
+        <div class="btn-group">
+            <!--<div class="col-md-8">-->
+            <input id="hexToBase64" type="button" value="hexToBase64"
+                   onclick="encode(getPanel(), CryptoJS.enc.Hex.parse, CryptoJS.enc.Base64)"/>
+            <!--</div>-->
+            <!--<div class="col-md-4">-->
+            <input id="base64ToHex" type="button" value="base64ToHex"
+                   onclick="encode(getPanel(), function(str){return CryptoJS.enc.Base64.parse(str);}, CryptoJS.enc.Hex)"/>
+            <!--</div>-->
+        </div>
+    </div>
+    <div id="ids" class="row">
+        <div class="btn-group">
+            <input id="UUID" type="button" value="UUID" onclick="encode(getPanel(), guid)"/>
+            <input id="momentToLong" type="button" value="yyyy-MM-dd HH:mm:ss.SSS Z -> 1234L"
+                   onclick="encode(getPanel(), stringToMillis)"/>
+            <input id="longToMoment" type="button" value="1234L -> yyyy-MM-dd HH:mm:ss.SSS Z"
+                   onclick="encode(getPanel(), millisToString)"/>
+        </div>
+    </div>
+    <div id="format" class="row">
+        <div class="btn-group">
+            <input id="jsonFormat" type="button" value="JSON Format" onclick="encode(getPanel(), jsonFormat)"/>
+            <input id="xmlFormat" type="button" value="XML Format" onclick="encode(getPanel(), xmlFormat)"/>
+            <input id="toUpper" type="button" value="To Upper"
+                   onclick="encode(getPanel(), toUpperCase)"/>
+            <input id="toLower" type="button" value="To Lower"
+                   onclick="encode(getPanel(), toLowerCase)"/>
+        </div>
+    </div>
+    <div id="bcrypts" class="row">
+        <div class="btn-group">
+            <label>plaintext password to check with bcrypt:
+                <input id="bcryptPass" type="text" value="" title="plaintext password to check with bcrypt"/>
+            </label>
+            <input id="bcrypt" type="button" value="bcrypt"
+                   onclick="bc(
+                       $('#bcryptPass').val(),
+                        getPanel().val(),
+                       $('#bcryptRounds').val(),
+                       function (res) { getPanel().val(res);},
+                       function (res) { alert('Password and Hash are: ' + (!!res ? 'OK' : 'NOT ok'));},
+                       function (err) { alert('Hash does not contain Salt to check: ' + err)}
+                        )"/>
+            <select id="bcryptRounds"></select>
+        </div>
+    </div>
+    <div id="scrypts" class="row">
+        <div class="btn-group">
+            <label>scrypt salt:
+                <input id="scryptSalt" type="text" value="ramdomSalt">
+            </label>
+            <label>scrypt n,r,p:
+                <input id="scryptN" type="text" value="1024"
+                       title="must be a power of two, 2^14=16384, 2^20=1048576">
+                <input id="scryptR" type="text" value="8">
+                <input id="scryptP" type="text" value="1">
+            </label>
+            <label>plaintext password to check with scrypt:
+                <input id="scryptPass" type="text" value="" title="plaintext password to check with scrypt"/>
+            </label>
+            <input id="scrypt" type="button" value="scrypt"
+                   onclick="getPanel().val(sc($('#scryptPass').val(), getPanel().val(), $('#scryptSalt').val(), $('#scryptN').val(), $('#scryptR').val(), $('#scryptP').val()))"/>
+        </div>
+    </div>
+    <div id="hmacs" class="row">
+        <div class="btn-group">
+            <input id="HmacMd5Hex" type="button" value="HmacMd5Hex"
+                   onclick="encode(getPanel(), function(str){return CryptoJS.HmacMD5(str, $('#HmacSecret').val());}, CryptoJS.enc.Hex)"/>
+            <input id="HmacSha1Hex" type="button" value="HmacSha1Hex"
+                   onclick="encode(getPanel(), function(str){return CryptoJS.HmacSHA1(str, $('#HmacSecret').val());}, CryptoJS.enc.Hex)"/>
+            <input id="HmacSha256Hex" type="button" value="HmacSha256Hex"
+                   onclick="encode(getPanel(), function(str){return CryptoJS.HmacSHA256(str, $('#HmacSecret').val());}, CryptoJS.enc.Hex)"/>
+            <input id="HmacSha512Hex" type="button" value="HmacSha512Hex"
+                   onclick="encode(getPanel(), function(str){return CryptoJS.HmacSHA512(str, $('#HmacSecret').val());}, CryptoJS.enc.Hex)"/>
+            <!--</div>-->
+            <!--<div id="cEight">-->
+            <input id="HmacMd5Base64" type="button" value="HmacMd5Base64"
+                   onclick="encode(getPanel(), function(str){return CryptoJS.HmacMD5(str, $('#HmacSecret').val());}, CryptoJS.enc.Base64)"/>
+            <input id="HmacSha1Base64" type="button" value="HmacSha1Base64"
+                   onclick="encode(getPanel(), function(str){return CryptoJS.HmacSHA1(str, $('#HmacSecret').val());}, CryptoJS.enc.Base64)"/>
+            <input id="HmacSha256Base64" type="button" value="HmacSha256Base64"
+                   onclick="encode(getPanel(), function(str){return CryptoJS.HmacSHA256(str, $('#HmacSecret').val());}, CryptoJS.enc.Base64)"/>
+            <input id="HmacSha512Base64" type="button" value="HmacSha512Base64"
+                   onclick="encode(getPanel(), function(str){return CryptoJS.HmacSHA512(str, $('#HmacSecret').val());}, CryptoJS.enc.Base64)"/>
+            <label>hmac secret:<input id="HmacSecret" type="text" value="" title="hmac secret"/> </label>
+        </div>
+    </div>
+    <div id="htmlEntity" class="row">
+        <a href="https://dev.w3.org/html5/html-author/charref">Charref</a>
+        <input id="htmlEntityEncodeHex" type="button" value="htmlEntityEncode HEX"
+               onclick="encode(getPanel(), he.encode, CryptoJS.enc.Utf8)"/>
+        <input id="htmlEntityEncodeDec" type="button" value="htmlEntityEncode DEC"
+               onclick="encode(getPanel(), function(str){
+                     return he.encode(str, {
+                        'decimal': true
+                     });
+                   }, CryptoJS.enc.Utf8)"/>
+        <input id="htmlEntityEncodeHexName" type="button" value="htmlEntityEncode HEX NAME"
+               onclick="encode(getPanel(), function(str){
+                     return he.encode(str, {
+                        'useNamedReferences': true
+                     });
+                   }, CryptoJS.enc.Utf8)"/>
+        <input id="htmlEntityEncodeDecName" type="button" value="htmlEntityEncode DEC NAME"
+               onclick="encode(getPanel(), function(str){
+                     return he.encode(str, {
+                        'useNamedReferences': true,
+                        'decimal': true
+                     });
+                   }, CryptoJS.enc.Utf8)"/>
+        <input id="htmlEntityEncodeHexEverything" type="button" value="htmlEntityEncode HEX ALL"
+               onclick="encode(getPanel(), function(str){
+                     return he.encode(str, {
+                        'encodeEverything': true,
+                     });
+                   }, CryptoJS.enc.Utf8)"/>
+        <input id="htmlEntityEncodeDecEverything" type="button" value="htmlEntityEncode DEC ALL"
+               onclick="encode(getPanel(), function(str){
+                     return he.encode(str, {
+                        'encodeEverything': true,
+                        'decimal': true
+                     });
+                   }, CryptoJS.enc.Utf8)"/>
+    </div>
+    <div id="jwt-button" class="row">
+        <button type="button" data-toggle="collapse" data-target="#jwt">JWT Secure Token</button>
+    </div>
+    <div id="jwt" class="row; collapse">
+        <a href="https://jwt.io/">JWT.IO</a>
+        <label>jwtHeader<input id="jwtHeader" type="text" value='{"alg":"HS256"}' title="must be valid jwt header"/></label>
+        <label>jwtPayload<textarea id="jwtPayload" name="jwtPayload"
+                                   style="width: 70em; height:10em">{"sub":"token","iss":"www.upstream.com","tenantID":1,"exp":1478649977,"applicationID":1,"userID":2}</textarea></label>
+        <label>jwtSecret<input id="jwtSecret" type="text" value='secret' title='secret to sign jwt'/></label>
+        <input id="jwtEncode" type="button" value="jwtEncode"
+               onclick="encode(getPanel(), function(str){return jwtPrapare(
+                           $('#jwtHeader').val(),
+                           $('#jwtPayload').val(),
+                           $('#jwtSecret').val()
+                           );}, CryptoJS.enc.Utf8)"/>
+    </div>
+
+    <div id="panels" class="row">
+        <label for="panel">Value:
+            <br/>
+            <form>
+                <textarea id="panel" name="panel" style="width: 70em; height:10em"></textarea>
+            </form>
+        </label>
+    </div>
+</div>
+<script>
+    //        var editor = CodeMirror.fromTextArea(document.getElementById("panel"), {
+    //            lineNumbers: true,
+    //            matchBrackets: true
+    //        });
+    // var btnFn = function () {
+    //     $(this)
+    //         .addClass("btn")
+    //         .addClass('btn-default')
+    //     ;
+    // };
+    // $("input[type='button']").each(btnFn);
+    // $("button").each(btnFn)
+
+</script>
+</body>
+</html>
