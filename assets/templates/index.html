@@ -11,9 +11,25 @@
     <script src="assets/js/dist/main.min.js?v=@@timestamp"></script>
     DIST-END-->
     <!--DEV-START-->
+    <script src="../js/dist/ace.js?v=@@timestamp"></script>
     <script src="../js/dist/main.js?v=@@timestamp"></script>
     <script src="../js/functions.js?v=@@timestamp"></script>
     <!--DEV-END-->
+
+    <style type="text/css" media="screen">
+        /*body {*/
+        /*    overflow: hidden;*/
+        /*}*/
+
+        #editor {
+            margin: 0;
+            /*position: absolute;*/
+            /*top: 0;*/
+            /*bottom: 0;*/
+            /*left: 0;*/
+            /*right: 0;*/
+        }
+    </style>
 </head>
 <body>
 <div id="actions" class="centered-container">
@@ -153,7 +169,21 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
     </div>
     <div class="actions-title">Value</div>
     <div class="actions-content">
-        <textarea id="panel" name="panel" style="width: 70em; height:10em"></textarea>
+        <!--        <textarea id="panel" name="panel" style="width: 70em; height:10em"></textarea>-->
+
+
+        <pre id="editor">function foo(items) {
+    var i;
+    for (i = 0; i < items.length; i++) {
+        alert("Ace Rocks " + items[i]);
+    }
+}</pre>
+
+        <script>
+            var editor = ace.edit("editor");
+            // editor.setTheme("ace/theme/twilight");
+            // editor.session.setMode("ace/mode/javascript");
+        </script>
     </div>
 </div>
 </body>
