@@ -1,3 +1,8 @@
+// var editor = ace.edit("panel");
+// editor.setTheme("ace/theme/twilight");
+// editor.session.setMode("ace/mode/javascript");
+
+
 // GUI functions
 function initBCryptRounds(max, panel) {
     for (jj = 4; jj < max; jj++) {
@@ -80,29 +85,44 @@ function isInt(value) {
     return !isNaN(value) && parseInt(Number(value)) == value && !isNaN(parseInt(value, 10));
 }
 
+function getValue(element) {
+    if (typeof editor !== "undefined") {
+        if (editor.getSelectedText().trim() === "") {
+            return editor.getSession().getValue();
+        } else {
+            return editor.getSelectedText();
+        }
+    } else {
+        return element.html();
+    }
+}
+
+function setValue(element, result) {
+    if (typeof editor !== "undefined") {
+        if (editor.getSelectedText().trim() === "") {
+            return editor.getSession().setValue(result);
+        } else {
+            var range = editor.getSession().getSelection().getRange();
+            editor.getSession().replace(range, result);
+            editor.findPrevious(result, {
+                wrap: true,
+                caseSensitive: true,
+                wholeWord: false,
+                regExp: false,
+                preventScroll: false
+            });
+            return result;
+        }
+    } else {
+        return element.html(result);
+    }
+}
+
 function encode(element, hashFunc, toStringFunc) {
-    var str = element.val();
-    var dom = element.get(0);
-
-    var before = '';
-    var selected = str;
-    var after = '';
-
-    var wasSelected = !(typeof dom === undefined || typeof dom.selectionStart === undefined || dom.selectionStart == dom.selectionEnd);
-    if (wasSelected) {
-        before = str.substr(0, dom.selectionStart);
-        selected = str.substr(dom.selectionStart, dom.selectionEnd - dom.selectionStart);
-        after = str.substr(dom.selectionEnd, str.length - dom.selectionEnd);
-    }
+    var selected = getValue(element);
     var hash = hashFunc(selected);
-    var res = hash.toString(toStringFunc);
-    var result = before + res + after;
-    element.val(result);
-    if (wasSelected) {
-        var selStart = before.length;
-        dom.selectionStart = selStart;
-        dom.selectionEnd = selStart + res.length;
-    }
+    var result = hash.toString(toStringFunc);
+    setValue(element, result);
     return result;
 }
 

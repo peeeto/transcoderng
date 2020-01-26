@@ -4,17 +4,20 @@
     <meta lang="en" charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="assets/css/main.css?v=1579380766985" rel="stylesheet">
+    <link href="assets/css/main.css?v=1580070900679" rel="stylesheet">
 
     <title>Transcoderng</title>
+    <script src="assets/js/dist/ace.js?v=1580070900679"></script>
+    <script src="assets/js/dist/mode-javascript.js?v=1580070900679"></script>
+    <script src="assets/js/dist/theme-twilight.js?v=1580070900679"></script>
     <!--DIST-START-->
-    <script src="assets/js/dist/main.min.js?v=1579380766985"></script>
+    <script src="assets/js/dist/main.min.js?v=1580070900679"></script>
     <!--DIST-END-->
     <!--DEV-START
-    <script src="assets/js/dist/ace.js?v=1579380766985"></script>
-    <script src="assets/js/dist/main.js?v=1579380766985"></script>
-    <script src="assets/js/functions.js?v=1579380766985"></script>
+    <script src="assets/js/dist/main.js?v=1580070900679"></script>
+    <script src="assets/js/functions.js?v=1580070900679"></script>
     DEV-END-->
+
 </head>
 <body>
 <div id="actions" class="centered-container">
@@ -70,7 +73,7 @@
                 <select id="bcryptRounds"></select>
             </label>
             <a href="#" id="bcrypt" class="btn"
-               onclick="bc($('#bcryptPass').val(), getPanel().val(), $('#bcryptRounds').val(), function (res) { getPanel().val(res);}, function (res) { alert('Password and Hash are: ' + (!!res ? 'OK' : 'NOT ok'));},function (err) { alert('Hash does not contain Salt to check: ' + err)})">
+               onclick="bc($('#bcryptPass').val(), getValue(getPanel()), $('#bcryptRounds').val(), function (res) { setValue(getPanel(),res);}, function (res) { alert('Password and Hash are: ' + (!!res ? 'OK' : 'NOT ok'));},function (err) { alert('Hash does not contain Salt to check: ' + err)})">
                 <span>bcrypt</span>
             </a>
         </div>
@@ -80,7 +83,7 @@
                 <input id="bcryptPass" type="text" value="" title="plaintext password to check with bcrypt"/>
             </label>
             <a href="#" id="bcryptCheck" class="btn"
-               onclick="bc($('#bcryptPass').val(), getPanel().val(), $('#bcryptRounds').val(), function (res) { getPanel().val(res);}, function (res) { alert('Password and Hash are: ' + (!!res ? 'OK' : 'NOT ok'));},function (err) { alert('Hash does not contain Salt to check: ' + err)})">
+               onclick="bc($('#bcryptPass').val(), getValue(getPanel()), $('#bcryptRounds').val(), function (res) { setValue(getPanel(),res);}, function (res) { alert('Password and Hash are: ' + (!!res ? 'OK' : 'NOT ok'));},function (err) { alert('Hash does not contain Salt to check: ' + err)})">
                 <span>bcryptCheck</span>
             </a>
         </div>
@@ -97,14 +100,14 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
             <input id="scryptR" type="text" value="8">
             <input id="scryptP" type="text" value="1">
         </label>
-        <a href="#" id="scrypt" class="btn" onclick="getPanel().val(sc($('#scryptPass').val(), getPanel().val(), $('#scryptSalt').val(), $('#scryptN').val(), $('#scryptR').val(), $('#scryptP').val()))">
+        <a href="#" id="scrypt" class="btn" onclick="setValue(getPanel(),sc($('#scryptPass').val(), getValue(getPanel()), $('#scryptSalt').val(), $('#scryptN').val(), $('#scryptR').val(), $('#scryptP').val()))">
             <span>scrypt</span>
         </a>
     </div>
     <div class="actions-title">Scrypt Check</div>
     <div class="actions-content">
         <label>plaintext password to check with scrypt: <input id="scryptPass" type="text" value="" title="plaintext password to check with scrypt"/> </label>
-        <a href="#" id="scryptCheck" class="btn" onclick="getPanel().val(sc($('#scryptPass').val(), getPanel().val(), $('#scryptSalt').val(), $('#scryptN').val(), $('#scryptR').val(), $('#scryptP').val()))">
+        <a href="#" id="scryptCheck" class="btn" onclick="setValue(getPanel(),sc($('#scryptPass').val(), getValue(getPanel()), $('#scryptSalt').val(), $('#scryptN').val(), $('#scryptR').val(), $('#scryptP').val()))">
             <span>scryptCheck</span>
         </a>
     </div>
@@ -154,8 +157,22 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
     </div>
     <div class="actions-title">Value</div>
     <div class="actions-content">
-        <textarea id="panel" name="panel" style="width: 70em; height:10em"></textarea>
+        <pre id="panel">
+function foo(items) {
+    var i;
+    for (i = 0; i < items.length; i++) {
+        alert("Ace Rocks " + items[i]);
+    }
+}
+        </pre>
+        <script>
+            var editor = ace.edit("panel");
+            editor.setTheme("ace/theme/twilight");
+            editor.session.setMode("ace/mode/javascript");
+            editor.session.setUndoManager(new ace.UndoManager());
+        </script>
     </div>
 </div>
+
 </body>
 </html>
