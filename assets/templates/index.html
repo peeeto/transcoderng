@@ -9,6 +9,10 @@
     <title>Transcoderng</title>
     <script src="../js/dist/ace.js?v=@@timestamp"></script>
     <script src="../js/dist/mode-javascript.js?v=@@timestamp"></script>
+    <script src="../js/dist/mode-xml.js?v=@@timestamp"></script>
+    <script src="../js/dist/worker-javascript.js?v=@@timestamp"></script>
+    <script src="../js/dist/worker-xml.js?v=@@timestamp"></script>
+    <script src="../js/dist/ext-beautify.js?v=@@timestamp"></script>
     <script src="../js/dist/theme-twilight.js?v=@@timestamp"></script>
     <!--DIST-START
     <script src="assets/js/dist/main.min.js?v=@@timestamp"></script>
@@ -17,7 +21,9 @@
     <script src="../js/dist/main.js?v=@@timestamp"></script>
     <script src="../js/functions.js?v=@@timestamp"></script>
     <!--DEV-END-->
+    <script>
 
+    </script>
 </head>
 <body>
 <div id="actions" class="centered-container">
@@ -54,7 +60,7 @@
             <a href="#" class="btn" id="hexToBase64" onclick="encode(getPanel(), CryptoJS.enc.Hex.parse, CryptoJS.enc.Base64)"><span>hexToBase64</span></a>
             <a href="#" class="btn" id="base64ToHex" onclick="encode(getPanel(), function(str){return CryptoJS.enc.Base64.parse(str);}, CryptoJS.enc.Hex)"><span>base64ToHex</span></a>
         </div>
-        <div class="actions-title">UUID/momentToLong/momentToLong</div>
+        <div class="actions-title">UUID/momentToLong/longToMoment</div>
         <div class="actions-content">
             <a href="#" class="btn" id="UUID" onclick="encode(getPanel(), guid)"><span>UUID</span></a>
             <a href="#" class="btn" id="momentToLong" onclick="encode(getPanel(), stringToMillis)"><span>yyyy-MM-dd HH:mm:ss.SSS Z -> 1234L</span></a>
@@ -62,7 +68,7 @@
         </div>
         <div class="actions-title">Format</div>
         <div class="actions-content">
-            <a href="#" class="btn" id="jsonFormat" onclick="encode(getPanel(), jsonFormat)"><span>JSON Format</span></a>
+            <a href="#" class="btn" id="jsonFormat" onclick="beautifyJson()"><span>JSON Format</span></a>
             <a href="#" class="btn" id="xmlFormat" onclick="encode(getPanel(), xmlFormat)"><span>XML Format</span></a>
             <a href="#" class="btn" id="toUpper" onclick="encode(getPanel(), toUpperCase)"><span>To Upper</span></a>
             <a href="#" class="btn" id="toLower" onclick="encode(getPanel(), toLowerCase)"><span>To Lower</span></a>
@@ -96,18 +102,40 @@
         <label><span title="N - CPU/memory cost parameter.
 p - Parallelization parameter; a positive integer satisfying p ≤ (232− 1) * hLen / MFLen.
 r - The blocksize parameter, which fine-tunes sequential memory read size and performance. 8 is commonly used.">scrypt n,r,p:</span>
-            <input id="scryptN" type="text" value="16348" title="must be a power of two, 2^14=16384, 2^20=1048576">
+            <input id="scryptN" type="text" value="16384" title="must be a power of two, 2^14=16384, 2^20=1048576">
             <input id="scryptR" type="text" value="8">
             <input id="scryptP" type="text" value="1">
         </label>
-        <a href="#" id="scrypt" class="btn" onclick="setValue(getPanel(),sc($('#scryptPass').val(), getValue(getPanel()), $('#scryptSalt').val(), $('#scryptN').val(), $('#scryptR').val(), $('#scryptP').val()))">
+        <a href="#" id="scrypt" class="btn" onclick="
+            sc(
+                $('#scryptPass').val(),
+                getValue(getPanel()),
+                $('#scryptSalt').val(),
+                $('#scryptN').val(),
+                $('#scryptR').val(),
+                $('#scryptP').val(),
+                function(hash){
+                    setValue(getPanel(), hash);
+                }
+               )">
             <span>scrypt</span>
         </a>
     </div>
     <div class="actions-title">Scrypt Check</div>
     <div class="actions-content">
         <label>plaintext password to check with scrypt: <input id="scryptPass" type="text" value="" title="plaintext password to check with scrypt"/> </label>
-        <a href="#" id="scryptCheck" class="btn" onclick="setValue(getPanel(),sc($('#scryptPass').val(), getValue(getPanel()), $('#scryptSalt').val(), $('#scryptN').val(), $('#scryptR').val(), $('#scryptP').val()))">
+        <a href="#" id="scryptCheck" class="btn" onclick="
+            sc(
+                $('#scryptPass').val(),
+                getValue(getPanel()),
+                $('#scryptSalt').val(),
+                $('#scryptN').val(),
+                $('#scryptR').val(),
+                $('#scryptP').val(),
+                function(hash){
+                    setValue(getPanel(), hash);
+                }
+               )">
             <span>scryptCheck</span>
         </a>
     </div>

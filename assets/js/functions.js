@@ -36,7 +36,9 @@ function getPanel() {
 Math.log2 = Math.log2 || function (x) {
     return Math.log(x) * Math.LOG2E;
 };
-var scrypt = scrypt_module_factory();
+// var scrypt = scrypt_module_factory(function (scrypt) {
+//     scrypt.to_hex(scrypt.random_bytes(16));
+// });
 
 var bcrypt = new bCrypt();
 
@@ -87,7 +89,7 @@ function isInt(value) {
 
 function getValue(element) {
     if (typeof editor !== "undefined") {
-        if (editor.getSelectedText().trim() === "") {
+        if (editor.getSelectedText() === "") {
             return editor.getSession().getValue();
         } else {
             return editor.getSelectedText();
@@ -99,7 +101,7 @@ function getValue(element) {
 
 function setValue(element, result) {
     if (typeof editor !== "undefined") {
-        if (editor.getSelectedText().trim() === "") {
+        if (editor.getSelectedText() === "") {
             return editor.getSession().setValue(result);
         } else {
             var range = editor.getSession().getSelection().getRange();
@@ -115,6 +117,13 @@ function setValue(element, result) {
         }
     } else {
         return element.html(result);
+    }
+}
+
+function beautifyJson() {
+    if (typeof editor !== "undefined") {
+        var beautify = ace.require('ace/ext/beautify');
+        beautify.beautify(editor.getSession());
     }
 }
 
@@ -166,41 +175,55 @@ function bc(passwordToCheck, toHash, rounds, callbackEncSucc, callbackCheckSucc,
     }
 }
 
-function sc(passwordToCheck, toHash, salt, n, r, p) {
-    if (passwordToCheck.trim().length <= 0) {
-        var hash = scrypt.crypto_scrypt(
-            scrypt.encode_utf8(toHash),
-            scrypt.encode_utf8(salt),
-            parseInt(n), parseInt(r), parseInt(p), 32);
-        var params = (((Math.log2(n) << 16) | (r << 8) | p)).toString(16);
-        var slt = btoa(salt);
-        var derived = btoa(String.fromCharCode.apply(null, hash));
-        return "$s0$" + params + "$" + slt + "$" + derived;
-    } else {
-        try {
-            var parts = toHash.split("\$");
-            if (parts.length != 5 || parts[1] !== 's0') {
-                alert("Invalid format of validated string")
-            } else {
-                params = parseInt(parts[2], 16);
-                salt = atob(parts[3]);
-                var passKey = parts[4];
-                n = Math.pow(2, params >> 16 & 0xffff);
-                r = params >> 8 & 0xff;
-                p = params & 0xff;
-                hash = scrypt.crypto_scrypt(
-                    scrypt.encode_utf8(passwordToCheck),
-                    scrypt.encode_utf8(salt),
-                    n, r, p, 32);
-                derived = btoa(String.fromCharCode.apply(null, hash));
-                var res = (passKey === derived);
-                alert("Password and Hash are: " + (!!res ? "OK" : "NOT ok"));
+// function f() {
+//
+//     scrypt_module_factory(function (scrypt) {
+//         console.log(
+//             scrypt.crypto_scrypt(
+//                 scrypt.encode_utf8("pleaseletmein"),
+//                 scrypt.encode_utf8("SodiumChloride"),
+//                 16384, 8, 1, 64));
+//     })
+// }
+
+
+function sc(passwordToCheck, toHash, salt, n, r, p, callback) {
+    scrypt_module_factory(function (scrypt) {
+        if (passwordToCheck.trim().length <= 0) {
+            var hash = scrypt.crypto_scrypt(
+                scrypt.encode_utf8(toHash),
+                scrypt.encode_utf8(salt),
+                parseInt(n), parseInt(r), parseInt(p), 64);
+            var params = (((Math.log2(n) << 16) | (r << 8) | p)).toString(16);
+            var slt = btoa(salt);
+            var derived = btoa(String.fromCharCode.apply(null, hash));
+            callback("$s0$" + params + "$" + slt + "$" + derived);
+        } else {
+            try {
+                var parts = toHash.split("\$");
+                if (parts.length != 5 || parts[1] !== 's0') {
+                    alert("Invalid format of validated string")
+                } else {
+                    params = parseInt(parts[2], 16);
+                    salt = atob(parts[3]);
+                    var passKey = parts[4];
+                    n = Math.pow(2, params >> 16 & 0xffff);
+                    r = params >> 8 & 0xff;
+                    p = params & 0xff;
+                    hash = scrypt.crypto_scrypt(
+                        scrypt.encode_utf8(passwordToCheck),
+                        scrypt.encode_utf8(salt),
+                        n, r, p, 64);
+                    derived = btoa(String.fromCharCode.apply(null, hash));
+                    var res = (passKey === derived);
+                    alert("Password and Hash are: " + (!!res ? "OK" : "NOT ok"));
+                }
+            } catch (error) {
+                alert("Hash does not contain Salt to check");
             }
-        } catch (error) {
-            alert("Hash does not contain Salt to check");
+            return toHash;
         }
-        return toHash;
-    }
+    });
 }
 
 function cleanupBase64(str) {
