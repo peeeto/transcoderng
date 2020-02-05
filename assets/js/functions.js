@@ -237,6 +237,11 @@ function jwtPrapare(header, payload, secret) {
     return cleanupBase64((headerEncoded + "." + payloadEncoded + "." + signature));
 }
 
+
+function cronExpressionDecode(cronExcpression) {
+    return cronstrue.toString(cronExcpression, {locale: "en"});
+}
+
 function base64Encode(str) {
     return btoa(unescape(encodeURIComponent(str)));
 }

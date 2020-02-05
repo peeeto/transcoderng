@@ -14,6 +14,7 @@
     <script src="../js/dist/worker-xml.js?v=@@timestamp"></script>
     <script src="../js/dist/ext-beautify.js?v=@@timestamp"></script>
     <script src="../js/dist/theme-twilight.js?v=@@timestamp"></script>
+    <script src="../js/dist/cronstrue-i18n.min.js?v=@@timestamp"></script>
     <!--DIST-START
     <script src="assets/js/dist/main.min.js?v=@@timestamp"></script>
     DIST-END-->
@@ -183,6 +184,17 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
         <label>jwtSecret<input id="jwtSecret" type="text" value='secret' title='secret to sign jwt'/></label>
         <a href="#" class="btn" id="jwtEncode" onclick="encode(getPanel(), function(str){return jwtPrapare( $('#jwtHeader').val(), $('#jwtPayload').val(), $('#jwtSecret').val() );}, CryptoJS.enc.Utf8)"><span>JWT Secure Token</span></a>
     </div>
+
+
+    <div class="actions-title">
+        <a href="https://cronexpressiondescriptor.azurewebsites.net/"><span>https://cronexpressiondescriptor.azurewebsites.net</span></a>
+    </div>
+    <div class="actions-content">
+        <label>cron expression: <input id="cronExpression" type="text" value='* * * ? * 2-6/2' title="cron expression"/></label>
+        <a href="#" class="btn" id="cronExpressionDecode" onclick="encode(getPanel(), function(str){return cronExpressionDecode( $('#cronExpression').val() );}, CryptoJS.enc.Utf8)"><span>Decode Cron Expression</span></a>
+    </div>
+
+
     <div class="actions-title">Value</div>
     <div class="actions-content">
         <pre id="panel">

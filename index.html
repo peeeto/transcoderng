@@ -4,22 +4,23 @@
     <meta lang="en" charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="assets/css/main.css?v=1580850863702" rel="stylesheet">
+    <link href="assets/css/main.css?v=1580911791145" rel="stylesheet">
 
     <title>Transcoderng</title>
-    <script src="assets/js/dist/ace.js?v=1580850863702"></script>
-    <script src="assets/js/dist/mode-javascript.js?v=1580850863702"></script>
-    <script src="assets/js/dist/mode-xml.js?v=1580850863702"></script>
-    <script src="assets/js/dist/worker-javascript.js?v=1580850863702"></script>
-    <script src="assets/js/dist/worker-xml.js?v=1580850863702"></script>
-    <script src="assets/js/dist/ext-beautify.js?v=1580850863702"></script>
-    <script src="assets/js/dist/theme-twilight.js?v=1580850863702"></script>
+    <script src="assets/js/dist/ace.js?v=1580911791145"></script>
+    <script src="assets/js/dist/mode-javascript.js?v=1580911791145"></script>
+    <script src="assets/js/dist/mode-xml.js?v=1580911791145"></script>
+    <script src="assets/js/dist/worker-javascript.js?v=1580911791145"></script>
+    <script src="assets/js/dist/worker-xml.js?v=1580911791145"></script>
+    <script src="assets/js/dist/ext-beautify.js?v=1580911791145"></script>
+    <script src="assets/js/dist/theme-twilight.js?v=1580911791145"></script>
+    <script src="assets/js/dist/cronstrue-i18n.min.js?v=1580911791145"></script>
     <!--DIST-START-->
-    <script src="assets/js/dist/main.min.js?v=1580850863702"></script>
+    <script src="assets/js/dist/main.min.js?v=1580911791145"></script>
     <!--DIST-END-->
     <!--DEV-START
-    <script src="assets/js/dist/main.js?v=1580850863702"></script>
-    <script src="assets/js/functions.js?v=1580850863702"></script>
+    <script src="assets/js/dist/main.js?v=1580911791145"></script>
+    <script src="assets/js/functions.js?v=1580911791145"></script>
     DEV-END-->
     <script>
 
@@ -183,6 +184,20 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
         <label>jwtSecret<input id="jwtSecret" type="text" value='secret' title='secret to sign jwt'/></label>
         <a href="#" class="btn" id="jwtEncode" onclick="encode(getPanel(), function(str){return jwtPrapare( $('#jwtHeader').val(), $('#jwtPayload').val(), $('#jwtSecret').val() );}, CryptoJS.enc.Utf8)"><span>JWT Secure Token</span></a>
     </div>
+
+
+
+
+    <div class="actions-title">
+        <a href="https://cronexpressiondescriptor.azurewebsites.net/"><span>https://cronexpressiondescriptor.azurewebsites.net</span></a>
+    </div>
+    <div class="actions-content">
+        <label>cron expression: <input id="cronExpression" type="text" value='* * * ? * 2-6/2' title="cron expression"/></label>
+        <a href="#" class="btn" id="cronExpressionDecode" onclick="encode(getPanel(), function(str){return cronExpressionDecode( $('#cronExpression').val() );}, CryptoJS.enc.Utf8)"><span>Decode Cron Expression</span></a>
+    </div>
+
+
+
     <div class="actions-title">Value</div>
     <div class="actions-content">
         <pre id="panel">
