@@ -143,7 +143,7 @@ function prepareUtf16String(str) {
 
 function stringToMillis(date) {
     if (!!date) {
-        var m = moment(date, 'YYYY-MM-DD HH:mm:ss.SSS Z');
+        var m = moment(date);
         if (m.isValid()) {
             return m.valueOf();
         }
@@ -155,7 +155,7 @@ function millisToString(date) {
     if (!isInt(date)) {
         date = new Date().getTime();
     }
-    return moment.utc(parseInt(date)).format('YYYY-MM-DD HH:mm:ss.SSS Z');
+    return moment.utc(parseInt(date)).format();
 }
 
 function bc(passwordToCheck, toHash, rounds, callbackEncSucc, callbackCheckSucc, callbackErr) {

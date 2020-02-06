@@ -7,14 +7,6 @@
     <link href="../css/main.css?v=@@timestamp" rel="stylesheet">
 
     <title>Transcoderng</title>
-    <script src="../js/dist/ace.js?v=@@timestamp"></script>
-    <script src="../js/dist/mode-javascript.js?v=@@timestamp"></script>
-    <script src="../js/dist/mode-xml.js?v=@@timestamp"></script>
-    <script src="../js/dist/worker-javascript.js?v=@@timestamp"></script>
-    <script src="../js/dist/worker-xml.js?v=@@timestamp"></script>
-    <script src="../js/dist/ext-beautify.js?v=@@timestamp"></script>
-    <script src="../js/dist/theme-twilight.js?v=@@timestamp"></script>
-    <script src="../js/dist/cronstrue-i18n.min.js?v=@@timestamp"></script>
     <!--DIST-START
     <script src="assets/js/dist/main.min.js?v=@@timestamp"></script>
     DIST-END-->
@@ -64,8 +56,8 @@
         <div class="actions-title">UUID/momentToLong/longToMoment</div>
         <div class="actions-content">
             <a href="#" class="btn" id="UUID" onclick="encode(getPanel(), guid)"><span>UUID</span></a>
-            <a href="#" class="btn" id="momentToLong" onclick="encode(getPanel(), stringToMillis)"><span>yyyy-MM-dd HH:mm:ss.SSS Z -> 1234L</span></a>
-            <a href="#" class="btn" id="longToMoment" onclick="encode(getPanel(), millisToString)"><span>1234L -> yyyy-MM-dd HH:mm:ss.SSS Z</span></a>
+            <a href="#" class="btn" id="momentToLong" onclick="encode(getPanel(), stringToMillis)"><span>2020-02-06T20:00:39+00:00 -> 1234L</span></a>
+            <a href="#" class="btn" id="longToMoment" onclick="encode(getPanel(), millisToString)"><span>1234L -> 2020-02-06T20:00:39+00:00</span></a>
         </div>
         <div class="actions-title">Format</div>
         <div class="actions-content">

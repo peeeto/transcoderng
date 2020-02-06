@@ -4,23 +4,15 @@
     <meta lang="en" charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="assets/css/main.css?v=1580911791145" rel="stylesheet">
+    <link href="assets/css/main.css?v=1581019724316" rel="stylesheet">
 
     <title>Transcoderng</title>
-    <script src="assets/js/dist/ace.js?v=1580911791145"></script>
-    <script src="assets/js/dist/mode-javascript.js?v=1580911791145"></script>
-    <script src="assets/js/dist/mode-xml.js?v=1580911791145"></script>
-    <script src="assets/js/dist/worker-javascript.js?v=1580911791145"></script>
-    <script src="assets/js/dist/worker-xml.js?v=1580911791145"></script>
-    <script src="assets/js/dist/ext-beautify.js?v=1580911791145"></script>
-    <script src="assets/js/dist/theme-twilight.js?v=1580911791145"></script>
-    <script src="assets/js/dist/cronstrue-i18n.min.js?v=1580911791145"></script>
     <!--DIST-START-->
-    <script src="assets/js/dist/main.min.js?v=1580911791145"></script>
+    <script src="assets/js/dist/main.min.js?v=1581019724316"></script>
     <!--DIST-END-->
     <!--DEV-START
-    <script src="assets/js/dist/main.js?v=1580911791145"></script>
-    <script src="assets/js/functions.js?v=1580911791145"></script>
+    <script src="assets/js/dist/main.js?v=1581019724316"></script>
+    <script src="assets/js/functions.js?v=1581019724316"></script>
     DEV-END-->
     <script>
 
@@ -64,8 +56,8 @@
         <div class="actions-title">UUID/momentToLong/longToMoment</div>
         <div class="actions-content">
             <a href="#" class="btn" id="UUID" onclick="encode(getPanel(), guid)"><span>UUID</span></a>
-            <a href="#" class="btn" id="momentToLong" onclick="encode(getPanel(), stringToMillis)"><span>yyyy-MM-dd HH:mm:ss.SSS Z -> 1234L</span></a>
-            <a href="#" class="btn" id="longToMoment" onclick="encode(getPanel(), millisToString)"><span>1234L -> yyyy-MM-dd HH:mm:ss.SSS Z</span></a>
+            <a href="#" class="btn" id="momentToLong" onclick="encode(getPanel(), stringToMillis)"><span>2020-02-06T20:00:39+00:00 -> 1234L</span></a>
+            <a href="#" class="btn" id="longToMoment" onclick="encode(getPanel(), millisToString)"><span>1234L -> 2020-02-06T20:00:39+00:00</span></a>
         </div>
         <div class="actions-title">Format</div>
         <div class="actions-content">
@@ -186,8 +178,6 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
     </div>
 
 
-
-
     <div class="actions-title">
         <a href="https://cronexpressiondescriptor.azurewebsites.net/"><span>https://cronexpressiondescriptor.azurewebsites.net</span></a>
     </div>
@@ -195,7 +185,6 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
         <label>cron expression: <input id="cronExpression" type="text" value='* * * ? * 2-6/2' title="cron expression"/></label>
         <a href="#" class="btn" id="cronExpressionDecode" onclick="encode(getPanel(), function(str){return cronExpressionDecode( $('#cronExpression').val() );}, CryptoJS.enc.Utf8)"><span>Decode Cron Expression</span></a>
     </div>
-
 
 
     <div class="actions-title">Value</div>
