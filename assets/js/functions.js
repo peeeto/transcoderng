@@ -18,15 +18,6 @@ $(function () {
     initBCryptRounds(32, $("#bcryptRounds"))
 });
 
-//$(function () {
-//    var selectAll = function () {
-//        this.select();
-//    };
-//    $(document).one('click', 'input[type=text]', selectAll);
-//    $(document).one('click', 'textarea', selectAll);
-//});
-
-
 function getPanel() {
     return $('#panel');
 }
@@ -36,9 +27,6 @@ function getPanel() {
 Math.log2 = Math.log2 || function (x) {
     return Math.log(x) * Math.LOG2E;
 };
-// var scrypt = scrypt_module_factory(function (scrypt) {
-//     scrypt.to_hex(scrypt.random_bytes(16));
-// });
 
 var bcrypt = new bCrypt();
 
@@ -47,6 +35,27 @@ function xmlFormat(str) {
         return vkbeautify.xml(str);
     } catch (error) {
         var msg = 'Not XML: ' + error;
+        alert(msg);
+        console.log(msg);
+    }
+}
+
+function yamlToProperties(str) {
+    try {
+        return jsyaml.safeLoad(str);
+    } catch (error) {
+        var msg = 'Not yaml: ' + error;
+        alert(msg);
+        console.log(msg);
+    }
+}
+
+function propertiesToYaml(str) {
+    try {
+        //TODO
+        return str;
+    } catch (error) {
+        var msg = 'Not properties: ' + error;
         alert(msg);
         console.log(msg);
     }
@@ -143,7 +152,7 @@ function prepareUtf16String(str) {
 
 function stringToMillis(date) {
     if (!!date) {
-        var m = moment(date);
+        var m = moment(date, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
         if (m.isValid()) {
             return m.valueOf();
         }
@@ -155,7 +164,7 @@ function millisToString(date) {
     if (!isInt(date)) {
         date = new Date().getTime();
     }
-    return moment.utc(parseInt(date)).format();
+    return moment.utc(parseInt(date)).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
 }
 
 function bc(passwordToCheck, toHash, rounds, callbackEncSucc, callbackCheckSucc, callbackErr) {
@@ -175,45 +184,33 @@ function bc(passwordToCheck, toHash, rounds, callbackEncSucc, callbackCheckSucc,
     }
 }
 
-// function f() {
-//
-//     scrypt_module_factory(function (scrypt) {
-//         console.log(
-//             scrypt.crypto_scrypt(
-//                 scrypt.encode_utf8("pleaseletmein"),
-//                 scrypt.encode_utf8("SodiumChloride"),
-//                 16384, 8, 1, 64));
-//     })
-// }
-
-
-function sc(passwordToCheck, toHash, salt, n, r, p, callback) {
+function sc(passwordToCheck, toHash, salt, nCpuCost, rMemoryCost, pParallelisation, callback, buflen) {
     scrypt_module_factory(function (scrypt) {
         if (passwordToCheck.trim().length <= 0) {
             var hash = scrypt.crypto_scrypt(
                 scrypt.encode_utf8(toHash),
                 scrypt.encode_utf8(salt),
-                parseInt(n), parseInt(r), parseInt(p), 64);
-            var params = (((Math.log2(n) << 16) | (r << 8) | p)).toString(16);
+                parseInt(nCpuCost), parseInt(rMemoryCost), parseInt(pParallelisation), buflen);
+            var params = (((Math.log2(nCpuCost) << 16) | (rMemoryCost << 8) | pParallelisation)).toString(16);
             var slt = btoa(salt);
             var derived = btoa(String.fromCharCode.apply(null, hash));
-            callback("$s0$" + params + "$" + slt + "$" + derived);
+            callback("$" + params + "$" + slt + "$" + derived);
         } else {
             try {
                 var parts = toHash.split("\$");
-                if (parts.length != 5 || parts[1] !== 's0') {
+                if (parts.length != 4) {
                     alert("Invalid format of validated string")
                 } else {
-                    params = parseInt(parts[2], 16);
-                    salt = atob(parts[3]);
-                    var passKey = parts[4];
-                    n = Math.pow(2, params >> 16 & 0xffff);
-                    r = params >> 8 & 0xff;
-                    p = params & 0xff;
+                    params = parseInt(parts[1], 16);
+                    salt = atob(parts[2]);
+                    var passKey = parts[3];
+                    nCpuCost = Math.pow(2, params >> 16 & 0xffff);
+                    rMemoryCost = params >> 8 & 0xff;
+                    pParallelisation = params & 0xff;
                     hash = scrypt.crypto_scrypt(
                         scrypt.encode_utf8(passwordToCheck),
                         scrypt.encode_utf8(salt),
-                        n, r, p, 64);
+                        nCpuCost, rMemoryCost, pParallelisation, buflen);
                     derived = btoa(String.fromCharCode.apply(null, hash));
                     var res = (passKey === derived);
                     alert("Password and Hash are: " + (!!res ? "OK" : "NOT ok"));

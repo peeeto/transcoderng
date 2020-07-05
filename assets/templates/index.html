@@ -56,13 +56,15 @@
         <div class="actions-title">UUID/momentToLong/longToMoment</div>
         <div class="actions-content">
             <a href="#" class="btn" id="UUID" onclick="encode(getPanel(), guid)"><span>UUID</span></a>
-            <a href="#" class="btn" id="momentToLong" onclick="encode(getPanel(), stringToMillis)"><span>2020-02-06T20:00:39+00:00 -> 1234L</span></a>
-            <a href="#" class="btn" id="longToMoment" onclick="encode(getPanel(), millisToString)"><span>1234L -> 2020-02-06T20:00:39+00:00</span></a>
+            <a href="#" class="btn" id="momentToLong" onclick="encode(getPanel(), stringToMillis)"><span>2020-02-06T20:00:39+00:00 -> 1581019239000</span></a>
+            <a href="#" class="btn" id="longToMoment" onclick="encode(getPanel(), millisToString)"><span>1581019239000 -> 2020-02-06T20:00:39+00:00</span></a>
         </div>
         <div class="actions-title">Format</div>
         <div class="actions-content">
             <a href="#" class="btn" id="jsonFormat" onclick="beautifyJson()"><span>JSON Format</span></a>
             <a href="#" class="btn" id="xmlFormat" onclick="encode(getPanel(), xmlFormat)"><span>XML Format</span></a>
+            <a href="#" class="btn" id="yamlToProperties" onclick="encode(getPanel(), yamlToProperties)"><span>Yaml to Properties</span></a>
+            <a href="#" class="btn" id="propertiesToYaml" onclick="encode(getPanel(), propertiesToYaml)"><span>Properties to Yaml</span></a>
             <a href="#" class="btn" id="toUpper" onclick="encode(getPanel(), toUpperCase)"><span>To Upper</span></a>
             <a href="#" class="btn" id="toLower" onclick="encode(getPanel(), toLowerCase)"><span>To Lower</span></a>
         </div>
@@ -98,6 +100,7 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
             <input id="scryptN" type="text" value="16384" title="must be a power of two, 2^14=16384, 2^20=1048576">
             <input id="scryptR" type="text" value="8">
             <input id="scryptP" type="text" value="1">
+            <input id="scryptKeyLength" type="text" value="32">
         </label>
         <a href="#" id="scrypt" class="btn" onclick="
             sc(
@@ -109,7 +112,8 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
                 $('#scryptP').val(),
                 function(hash){
                     setValue(getPanel(), hash);
-                }
+                },
+                $('#scryptKeyLength').val(),
                )">
             <span>scrypt</span>
         </a>
@@ -127,7 +131,8 @@ r - The blocksize parameter, which fine-tunes sequential memory read size and pe
                 $('#scryptP').val(),
                 function(hash){
                     setValue(getPanel(), hash);
-                }
+                },
+                $('#scryptKeyLength').val(),
                )">
             <span>scryptCheck</span>
         </a>

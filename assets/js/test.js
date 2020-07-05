@@ -184,12 +184,12 @@ QUnit.test('base32Decode', function (assert) {
 });
 
 QUnit.test('stringToMillis', function (assert) {
-    assert.equal(stringToMillis('2015-11-08 21:05:34.670 +00:00'), '1447016734670');
-    assert.equal(stringToMillis('2015-11-08 21:06:25.711 +00:00'), '1447016785711');
+    assert.equal(stringToMillis('2015-11-08T21:05:34.670+00:00'), '1447016734670');
+    assert.equal(stringToMillis('2015-11-08T21:06:25.711+00:00'), '1447016785711');
 });
 QUnit.test('millisToString', function (assert) {
-    assert.equal(millisToString('1447016734670'), '2015-11-08 21:05:34.670 +00:00');
-    assert.equal(millisToString('1447016785711'), '2015-11-08 21:06:25.711 +00:00');
+    assert.equal(millisToString('1447016734670'), '2015-11-08T21:05:34.670+00:00');
+    assert.equal(millisToString('1447016785711'), '2015-11-08T21:06:25.711+00:00');
 });
 /**
  * echo -n "admin" | openssl md5 -binary|base64 ; ISMvKXpXpadDiUoOSoAfww==
@@ -246,12 +246,44 @@ QUnit.test('toLowerCase', function (assert) {
     assert.equal(toLowerCase('AŽ'), 'až');
 });
 QUnit.test('scrypt', function (assert) {
-    assert.equal(sc('', 'password', 'randomSalt', 1024, 8, 1), '$s0$a0801$cmFuZG9tU2FsdA==$4BgX8flnz7UGOZ30L5nB7Y1aMJl2pg8JSpRxMhjwxrs=');
-    assert.equal(sc('', 'a', 'randomSalt', 1024, 8, 1), '$s0$a0801$cmFuZG9tU2FsdA==$NmXr19xOOkw4RHDXJ1QsiYmwClLpdnCWEeHEVAbT10o=');
-    assert.equal(sc('', '', 'randomSalt', 1024, 8, 1), '$s0$a0801$cmFuZG9tU2FsdA==$lKzthd2QyCK41w5ErdR1XkDDW1r69gganjHLADgw2Ec=');
-    assert.equal(sc('', '64d04051-e48a-00fd-d996-82b9fd5a9ca2', '64d04051', 1024, 8, 1), '$s0$a0801$NjRkMDQwNTE=$OpPyz5onfpBVczPbmHbQvKMtTbiH9+U+CQrHwpIUHWY=');
-    assert.equal(sc('', '64d04051-e48a-00fd-d996-82b9fd5a9ca2', '64d04051', 2048, 16, 2), '$s0$b1002$NjRkMDQwNTE=$ckWl5OWrgTlwwR6dhEbs0OZff8FnsUPnS9SL4xCF3Xs=');
+    sc('', 'password', 'randomSalt', 1024, 8, 1, function (actual) {
+        assert.equal(actual, '$a0801$cmFuZG9tU2FsdA==$4BgX8flnz7UGOZ30L5nB7Y1aMJl2pg8JSpRxMhjwxrs=');
+    }, 32);
+    sc('', 'password', 'randomSalt', 1024, 8, 1, function (actual) {
+        assert.equal(actual, '$a0801$cmFuZG9tU2FsdA==$4BgX8flnz7UGOZ30L5nB7Y1aMJl2pg8JSpRxMhjwxrs0K3Vw9vnvbtDyFKSg1SoWwj5JsKNq0rBWNX3Eamhfqg==');
+    }, 64);
+    sc('', 'a', 'randomSalt', 1024, 8, 1, function (actual) {
+        assert.equal(actual, '$a0801$cmFuZG9tU2FsdA==$NmXr19xOOkw4RHDXJ1QsiYmwClLpdnCWEeHEVAbT10o=');
+    }, 32);
+    sc('', 'a', 'randomSalt', 1024, 8, 1, function (actual) {
+        assert.equal(actual, '$a0801$cmFuZG9tU2FsdA==$NmXr19xOOkw4RHDXJ1QsiYmwClLpdnCWEeHEVAbT10pnl1BAxKIoSzpewTcqq/VibfqL0kswhZSNdAlisvvmcQ==');
+    }, 64);
+    sc('', '', 'randomSalt', 1024, 8, 1, function (actual) {
+        assert.equal(actual, '$a0801$cmFuZG9tU2FsdA==$lKzthd2QyCK41w5ErdR1XkDDW1r69gganjHLADgw2Ec=');
+    }, 32);
+    sc('', '', 'randomSalt', 1024, 8, 1, function (actual) {
+        assert.equal(actual, '$a0801$cmFuZG9tU2FsdA==$lKzthd2QyCK41w5ErdR1XkDDW1r69gganjHLADgw2Ee+h72w8qrYMbPkgcvJAcEsgyI/zWMDvyT/E7B2dk3zUw==');
+    }, 64);
+    sc('', '64d04051-e48a-00fd-d996-82b9fd5a9ca2', '64d04051', 1024, 8, 1, function (actual) {
+        assert.equal(actual, '$a0801$NjRkMDQwNTE=$OpPyz5onfpBVczPbmHbQvKMtTbiH9+U+CQrHwpIUHWY=');
+    }, 32);
+    sc('', '64d04051-e48a-00fd-d996-82b9fd5a9ca2', '64d04051', 1024, 8, 1, function (actual) {
+        assert.equal(actual, '$a0801$NjRkMDQwNTE=$OpPyz5onfpBVczPbmHbQvKMtTbiH9+U+CQrHwpIUHWaD1UBuRfZKqw9fga2UCb245E2pjnJWgPMks5gTI0femQ==');
+    }, 64);
+    sc('', '64d04051-e48a-00fd-d996-82b9fd5a9ca2', '64d04051', 2048, 16, 2, function (actual) {
+        assert.equal(actual, '$b1002$NjRkMDQwNTE=$ckWl5OWrgTlwwR6dhEbs0OZff8FnsUPnS9SL4xCF3Xs=');
+    }, 32);
+    sc('', '64d04051-e48a-00fd-d996-82b9fd5a9ca2', '64d04051', 2048, 16, 2, function (actual) {
+        assert.equal(actual, '$b1002$NjRkMDQwNTE=$ckWl5OWrgTlwwR6dhEbs0OZff8FnsUPnS9SL4xCF3Xu/dyOSc5bQ7O9AucOYcCfK+wniDtCl68NEa5+N6mrP6Q==');
+    }, 64);
+    sc('', '64d04051-e48a-00fd-d996-82b9fd5a9ca2', '64d04051', 16384, 8, 1, function (actual) {
+        assert.equal(actual, '$e0801$NjRkMDQwNTE=$8qxGC2GXz0AAKcHhnzSLuAY2sDr1RYakoCxFGi99MN0=');
+    }, 32);
+    sc('', '64d04051-e48a-00fd-d996-82b9fd5a9ca2', '64d04051', 16384, 8, 1, function (actual) {
+        assert.equal(actual, '$e0801$NjRkMDQwNTE=$8qxGC2GXz0AAKcHhnzSLuAY2sDr1RYakoCxFGi99MN3BdaqPvajq+e9ZGOEKXHYItUrww1cJlWTT7qANXMCVig==');
+    }, 64);
 });
+
 function assertHmacEqual(payload, hmacFunction, secret, toStringFunc, assert, expected) {
     var hmacFunc = function (str) {
         return hmacFunction(str, secret);
@@ -326,9 +358,36 @@ QUnit.test('hmacSha512Base64', function (assert) {
 //    var actual = bc('', 'admin', 4);
 //    assert.equal(bc(actual, 'admin', 0), true);
 //});
-//QUnit.test('xmlFormat', function (assert) {
-//assert.equal(1, 2, '');
-//});
+QUnit.test('xmlFormat', function (assert) {
+    assert.equal(xmlFormat('<xml><a>val</a></xml>'), '<xml>\n' +
+        '    <a>val</a>\n' +
+        '</xml>');
+});
+//TODO
+QUnit.test('propertiesToYaml', function (assert) {
+    assert.equal(propertiesToYaml('a.b=1\n' +
+        'a.c=2\n' +
+        'b.a=4\n' +
+        'a.d=3'), 'a:\n' +
+        '  b: 1\n' +
+        '  c: 2\n' +
+        '  d: 3\n' +
+        'b:\n' +
+        '  a: 4\n');
+});
+
+//TODO
+QUnit.test('yamlToProperties', function (assert) {
+    assert.equal(yamlToProperties('a:\n' +
+        '  b: 1\n' +
+        '  c: 2\n' +
+        '  d: 3\n' +
+        'b:\n' +
+        '  a: 4\n', 'a.b=1\n' +
+        'a.c=2\n' +
+        'b.a=4\n' +
+        'a.d=3'));
+});
 
 /**
  * echo -n "payload" | openssl sha512 -hmac "secret" -binary | openssl base64
