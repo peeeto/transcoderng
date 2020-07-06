@@ -167,9 +167,13 @@ function millisToString(date) {
     return moment.utc(parseInt(date)).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
 }
 
-function bc(passwordToCheck, toHash, rounds, callbackEncSucc, callbackCheckSucc, callbackErr) {
+function bc(passwordToCheck, toHash, rounds, callbackEncSucc, callbackCheckSucc, callbackErr, salt) {
+    var bcrypt = new bCrypt();
+
     if (passwordToCheck.length <= 0) {
-        var salt = bcrypt.gensalt(parseInt(rounds));
+        if(!!rounds){
+            salt = bcrypt.gensalt(parseInt(rounds));
+        }
         bcrypt.hashpw(toHash, salt, function (hash) {
             callbackEncSucc(hash);
         });

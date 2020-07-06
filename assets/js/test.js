@@ -353,11 +353,19 @@ QUnit.test('hmacSha384Base64', function (assert) {
 QUnit.test('hmacSha512Base64', function (assert) {
     assertHmacEqual('payload', CryptoJS.HmacSHA512, 'secret', CryptoJS.enc.Base64, assert, 'KR3aqiPK+jqq4cl1U5H0vvNbvby5JzmlYYpciW9lINKw0o0tKYfayXR54xIUpR2Wz86voo5GpPlhtjxGNSoYng==');
 });
-//TODO make testable and test
-//QUnit.test('bcrypt', function (assert) {
-//    var actual = bc('', 'admin', 4);
-//    assert.equal(bc(actual, 'admin', 0), true);
-//});
+
+QUnit.test('bcrypt', function (assert) {
+    assert.ok(true);
+    bc('', '', null, function (actual) {
+        assert.equal(actual, '$2a$10$Wkpvzr6i/iIthnPpArcm/.WhjZxqD80S9cx5MTo7DNCqSGZHCwFJW');
+    },null,null,"$2a$10$Wkpvzr6i/iIthnPpArcm/.");
+    bc('', 'password', null, function (actual) {
+        assert.equal(actual, '$2a$10$Wkpvzr6i/iIthnPpArcm/.3ErjyGsO6B6nJ8kZDMa7177wSGxSnkO');
+    },null,null,"$2a$10$Wkpvzr6i/iIthnPpArcm/.");
+    bc('', 'password', 10, function (actual) {
+        assert.ok(actual.length>1);
+    });
+});
 QUnit.test('xmlFormat', function (assert) {
     assert.equal(xmlFormat('<xml><a>val</a></xml>'), '<xml>\n' +
         '    <a>val</a>\n' +
