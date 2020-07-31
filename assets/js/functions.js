@@ -40,9 +40,60 @@ function xmlFormat(str) {
     }
 }
 
+function objectFlattener(object) {
+    return Reflect.apply(Array.prototype.concat, [], Object.keys(object).map(key => {
+        if (object[key] instanceof Object) {
+            return objectFlattener(object[key]);
+        }
+        return `${key}: ${object[key]}`;
+    }));
+}
+
+function flatten(key, input, output) {
+    if (isArray(input)) {
+        for (var index = 0, length = input.length; index < length; index++) {
+            flatten(key + "." + index, input[index], output);
+        }
+    } else if (isObject(input)) {
+        for (var item in input) {
+            if (input.hasOwnProperty(item)) {
+                if (key === '') {
+                    flatten(item, input[item], output);
+                } else {
+                    flatten(key + "." + item, input[item], output);
+                }
+            }
+        }
+    } else {
+        // input = input.replaceAll('\"', '"');
+        return output.push(key + "=" + input);
+    }
+}
+
+function isArray(obj) {
+    return obj != null && (Array.isArray(obj) || obj.toString() === '[object Array]');
+}
+
+function isObject(obj) {
+    return obj === Object(obj);
+}
+
 function yamlToProperties(str) {
     try {
-        return jsyaml.safeLoad(str);
+        let yaml = jsyaml.safeLoad(str);
+        console.log(yaml);
+        // let flat = objectFlattener(yaml);
+        output = [];
+        flatten('', yaml, output);
+        console.log(output);
+        return output.join("\n");
+        // return JSON.stringify(yaml)
+        //     .replace(/,/g,'\n')
+        //     .replace(/\\/g,'')
+        //     .replace(/"/g,'')
+        //     .replace(/:/g,'.')
+        //     .replace(/}/g,'')
+        //     .replace(/{/g,'')
     } catch (error) {
         var msg = 'Not yaml: ' + error;
         alert(msg);
@@ -50,10 +101,34 @@ function yamlToProperties(str) {
     }
 }
 
+//TODO
 function propertiesToYaml(str) {
     try {
-        //TODO
-        return str;
+        let split = str.split("\n");
+        split = split.sort();
+        let result = {};
+        let objects = {};
+        for (const line of split) {
+            const value = line.replace('.*?=', '');
+            const wholeKey = line.replace('=.*?', '');
+            const objectKey = wholeKey.replace(/(\.\s)+[^.]$/, 'and $1');
+            const key = wholeKey.replace(/.*,(.*)$/, "$1");
+            let o = objects[objectKey];
+            if (objects[objectKey] == null) {
+                o = objects[objectKey] = {}
+            }
+            Object.assign(o, {[`${key}`]: value});
+            // const keyItems = key.split(".");
+            // for (let index = 0, length = keyItems.length; index < length; index++) {
+            //     if (index > length) {
+            //         Object.assign(result, {[`${keyItems[index]}`]: value});
+            //     } else {
+            //         Object.assign(result, {[`${keyItems[index]}`]: keyItems[index + 1]});
+            //     }
+            // }
+
+        }
+        return objects;
     } catch (error) {
         var msg = 'Not properties: ' + error;
         alert(msg);
@@ -171,7 +246,7 @@ function bc(passwordToCheck, toHash, rounds, callbackEncSucc, callbackCheckSucc,
     var bcrypt = new bCrypt();
 
     if (passwordToCheck.length <= 0) {
-        if(!!rounds){
+        if (!!rounds) {
             salt = bcrypt.gensalt(parseInt(rounds));
         }
         bcrypt.hashpw(toHash, salt, function (hash) {

@@ -371,30 +371,37 @@ QUnit.test('xmlFormat', function (assert) {
         '    <a>val</a>\n' +
         '</xml>');
 });
-//TODO
+
 QUnit.test('propertiesToYaml', function (assert) {
-    assert.equal(propertiesToYaml('a.b=1\n' +
-        'a.c=2\n' +
-        'b.a=4\n' +
-        'a.d=3'), 'a:\n' +
-        '  b: 1\n' +
-        '  c: 2\n' +
-        '  d: 3\n' +
+    assert.equal(propertiesToYaml('a.ab.c=C\n' +
+        'a.ab.d=D\n' +
+        'b.bc.d=D\n' +
+        'b.bc.e=null\n' +
+        'b.ab=null'), 'a:\n' +
+        '  ab:\n' +
+        '    c: "C"\n' +
+        '    d: \'D\'\n' +
         'b:\n' +
-        '  a: 4\n');
+        '  bc:\n' +
+        '    d: D\n' +
+        '    e: null\n' +
+        '  ab:');
 });
 
-//TODO
 QUnit.test('yamlToProperties', function (assert) {
     assert.equal(yamlToProperties('a:\n' +
-        '  b: 1\n' +
-        '  c: 2\n' +
-        '  d: 3\n' +
+        '  ab:\n' +
+        '    c: "C"\n' +
+        '    d: \'D\'\n' +
         'b:\n' +
-        '  a: 4\n', 'a.b=1\n' +
-        'a.c=2\n' +
-        'b.a=4\n' +
-        'a.d=3'));
+        '  bc:\n' +
+        '    d: D\n' +
+        '    e: null\n' +
+        '  ab:'), 'a.ab.c=C\n' +
+        'a.ab.d=D\n' +
+        'b.bc.d=D\n' +
+        'b.bc.e=null\n' +
+        'b.ab=null');
 });
 
 /**
