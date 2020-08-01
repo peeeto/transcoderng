@@ -40,14 +40,14 @@ function xmlFormat(str) {
     }
 }
 
-function objectFlattener(object) {
-    return Reflect.apply(Array.prototype.concat, [], Object.keys(object).map(key => {
-        if (object[key] instanceof Object) {
-            return objectFlattener(object[key]);
-        }
-        return `${key}: ${object[key]}`;
-    }));
-}
+// function objectFlattener(object) {
+//     return Reflect.apply(Array.prototype.concat, [], Object.keys(object).map(key => {
+//         if (object[key] instanceof Object) {
+//             return objectFlattener(object[key]);
+//         }
+//         return `${key}: ${object[key]}`;
+//     }));
+// }
 
 function flatten(key, input, output) {
     if (isArray(input)) {
@@ -107,17 +107,60 @@ function propertiesToYaml(str) {
         let split = str.split("\n");
         split = split.sort();
         let result = {};
-        let objects = {};
         for (const line of split) {
-            const value = line.replace('.*?=', '');
-            const wholeKey = line.replace('=.*?', '');
-            const objectKey = wholeKey.replace(/(\.\s)+[^.]$/, 'and $1');
-            const key = wholeKey.replace(/.*,(.*)$/, "$1");
-            let o = objects[objectKey];
-            if (objects[objectKey] == null) {
-                o = objects[objectKey] = {}
+            let objects = {};
+            //"a.b.c.d=D"
+            // "D"
+            const value = line.match(".*=(.*)$")[1];
+            // "a.b.c.d"
+            const wholeKey = line.match("(.*)=.*$")[1];
+            // "a.b.c"
+            const objectKey = line.match("(.*)\\..*=.*$")[1];
+            //"d"
+            const key = line.match(".*\\.(.*)=.*$")[1];
+
+            let prevK = null;
+            let prevObject = null;
+            let wholeKeySplit = wholeKey.split(".");
+            let isFirst = true;
+            for (const k of wholeKeySplit) {
+                let o = null;
+                if (isFirst) {
+                    o = result[k];
+                }
+                if (o == null) {
+                    o = {};
+                }
+
+                if (k === key) {
+                    Object.assign(o, {[`${k}`]: value});
+                    if (prevObject != null) {
+                        Object.assign(prevObject, {[`${k}`]: value});
+
+                    }
+
+                } else {
+                    // Object.assign(o, {[`${k}`]: {}});
+                    if (prevK === null) {
+                        Object.assign(result, {[`${k}`]: o});
+                    } else {
+                        Object.assign(result[prevK], {[`${k}`]: o});
+                    }
+                }
+                prevK = k;
+                prevObject = o;
+                isFirst = false;
             }
-            Object.assign(o, {[`${key}`]: value});
+
+            // Object.assign(result, {[`${wholeKey}`]: objects});
+
+            // let o = objects[objectKey];
+            // if (objects[objectKey] == null) {
+            //     o = objects[objectKey] = {}
+            // }
+            // Object.assign(o, {[`${key}`]: value});
+
+
             // const keyItems = key.split(".");
             // for (let index = 0, length = keyItems.length; index < length; index++) {
             //     if (index > length) {
@@ -128,7 +171,7 @@ function propertiesToYaml(str) {
             // }
 
         }
-        return objects;
+        return result;
     } catch (error) {
         var msg = 'Not properties: ' + error;
         alert(msg);
